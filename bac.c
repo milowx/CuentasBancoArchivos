@@ -47,7 +47,7 @@ void actualizar_archivo(){
 }
 
 char validar_char(char* letra, char opc1, char opc2){
-    
+
 }
 
 int pedir_cuenta(){
@@ -131,7 +131,7 @@ void transferir(){
         }
 
         printf("\n\tDesea realilzar otra transaccion?[S/N]: ");
-        respuesta=validar_char(respuesta);
+        respuesta=validar_char(respuesta, 'F', 'M');
 
         do{
             printf("\n\tDesea realizar otra transaccion?[S/N]: ");
