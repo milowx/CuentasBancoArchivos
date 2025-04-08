@@ -23,7 +23,7 @@ Cuenta cuentas[TAM];
 int cuentas_leidas=0;
 FILE* parchivo;
 
-void leer_archivo(){
+void leer_archivo(void){
     parchivo=fopen("banco.txt", "rt");
 
     while((fscanf(parchivo, "%s %s %ld %ld %lf %lf %s", cuentas[cuentas_leidas].pnombre, cuentas[cuentas_leidas].apellido, 
@@ -36,7 +36,7 @@ void leer_archivo(){
     fclose(parchivo);
 }
 
-void actualizar_archivo(){
+void actualizar_archivo(void){
     parchivo=fopen("banco.txt", "wt");
     for(int i=0; i<cuentas_leidas; i++){
         fprintf(parchivo, "\n%10s %10s %10ld %10ld %12.2lf %12.2lf %10c", cuentas[i].pnombre, cuentas[i].apellido, 
@@ -46,11 +46,39 @@ void actualizar_archivo(){
     fclose(parchivo);
 }
 
-char validar_char(char* letra, char opc1, char opc2){
-
+void validar_int(unsigned long int* num,unsigned long int limite){
+    do{
+        scanf("%ld", num);
+        if(*num<=limite){
+            if(limite==0){
+                printf("\n\t\aERROR: Ingresar un numero positivo.\n\t");
+            }else{
+                printf("\n\t\aERROR: Ingrese un numero de 8 digitos.\n\t");
+            }
+        }
+    }while(*num<=limite);
 }
 
-int pedir_cuenta(){
+void validar_char(char* letra, char opc1, char opc2){
+    do{
+        scanf(" %c", letra);
+        *letra=toupper((*letra));
+        if(*letra!=opc1 && *letra!=opc2){
+            printf("\n\t\aERROR:Ingresar la letra [%c]/[%c]!\n\t", opc1, opc2);
+        }
+    }while(*letra!=opc1 && *letra!=opc2);
+}
+
+void validar_fl(double* fl, double limite){
+    do{
+        scanf("%lf", fl);
+        if(*fl<=limite){
+            printf("\n\t\aERROR: Ingresar un numero positivo.\n\t");
+        }
+    }while(*fl<=limite);
+}
+
+int pedir_cuenta(void){
     int num;
     do{
         printf("\n\tIngrese el numero de cuenta o numero de tarjeta[8 digitos]: ");
@@ -87,7 +115,7 @@ void mostrar_una_cuenta(int indice_cuenta){
     cuentas[indice_cuenta].num_cuenta, cuentas[indice_cuenta].num_tarjeta, cuentas[indice_cuenta].saldo, cuentas[indice_cuenta].interes);
 }
 
-void transferir(){
+void transferir(void){
     int ncuenta_origen, ncuenta_destino, icuenta_origen, icuenta_destino;
     char respuesta;
     double cantidad;
@@ -131,22 +159,12 @@ void transferir(){
         }
 
         printf("\n\tDesea realilzar otra transaccion?[S/N]: ");
-        respuesta=validar_char(respuesta, 'F', 'M');
-
-        do{
-            printf("\n\tDesea realizar otra transaccion?[S/N]: ");
-            scanf(" %c", &respuesta);
-            respuesta=toupper(respuesta);
-            if(respuesta!='S' && respuesta!='N'){
-                printf("\n\tIngrese la letra S o N\n\t");
-            }
-        }while(respuesta!='S' && respuesta!='N');
+        validar_char(&respuesta, 'S', 'N');
     }while(respuesta=='S');
     actualizar_archivo();
 }
 
-void borrar(){
-    Cuenta buffer;
+void borrar(void){
     char respuesta;
     int indice_cuenta;
 
@@ -166,15 +184,8 @@ void borrar(){
             cuentas_leidas--;
         }
 
-        do{
-            printf("\n\tDesea borrar otra cuenta?[S/N]: ");
-            scanf(" %c", &respuesta);
-            respuesta=toupper(respuesta);
-
-            if(respuesta!='S' && respuesta!='N'){
-                printf("\n\tIngrese la letra S o N\n\t");
-            }
-        }while(respuesta!='S' && respuesta!='N');
+        printf("\n\tDesea borrar otra cuenta?[S/N]: ");
+        validar_char(&respuesta, 'S', 'N');
     }while(respuesta=='S');
 
     actualizar_archivo();
@@ -195,19 +206,13 @@ void buscar_una_cuenta(){
             mostrar_una_cuenta(indice_cuenta);
         }
 
-        do{
-            printf("\n\tDesea buscar otra cuenta?[S/N]");
-            scanf(" %c", &respuesta);
-            respuesta=toupper(respuesta);
-            if(respuesta!='S' && respuesta!='N'){
-                printf("\n\tIngrese la letra N o S");
-            }
-        }while(respuesta!='S'&&respuesta!='N');
+        printf("\n\tDesea buscar otra cuenta?[S/N]: ");
+        validar_char(&respuesta, 'S', 'N');
 
     }while(respuesta=='S');
 }
 
-void mostrar_todo(){
+void mostrar_todo(void){
     printf("\n\tNOMBRE    APELLIDO     GENERO       NUMERO DE CUENTA      NUMERO DE TARJETA         SALDO       INTERES");
     for(int i=0; i<cuentas_leidas; i++){
         printf("\n\t%s      %s        %c          %ld         %ld        %.2lf         %.2lf",
@@ -216,7 +221,7 @@ void mostrar_todo(){
     }
 }
 
-void ingresar(){
+void ingresar(void){
     char respuesta;
 
     parchivo=fopen("banco.txt", "at");
@@ -228,61 +233,34 @@ void ingresar(){
         printf("\n\tIngrese el apellido del titular de la cuenta: ");
         scanf("%s", cuentas[cuentas_leidas].apellido);
 
-        do{
-            printf("\n\tIngrese el genero del titular de la cuenta[M/F]: ");
-            scanf(" %c", &cuentas[cuentas_leidas].genero);
-            cuentas[cuentas_leidas].genero=toupper(cuentas[cuentas_leidas].genero);
-            if(cuentas[cuentas_leidas].genero!='M' && cuentas[cuentas_leidas].genero!='F'){
-                printf("\n\t\aERROR: Ingrese la letra M o F\n\t");
-            }
-        }while(cuentas[cuentas_leidas].genero!='M' && cuentas[cuentas_leidas].genero!='F');
+        printf("\n\tIngrese el genero del titular de la cuenta[M/F]: ");
+        validar_char(&cuentas[cuentas_leidas].genero, 'M', 'F');
 
-        do{
-            printf("\n\tIngrese el numero de cuenta: ");
-            scanf("%ld", &cuentas[cuentas_leidas].num_cuenta);
-            if(cuentas[cuentas_leidas].num_cuenta<8){
-                printf("\n\t\aERROR: Ingrese un numero de al menos 8 digitos.\n\t");
-            }
-        }while(cuentas[cuentas_leidas].num_cuenta<8);
+        printf("\n\tIngrese el numero de cuenta: ");
+        validar_int(&cuentas[cuentas_leidas].num_cuenta, 10000000);
 
-        do{
-            printf("\n\tIngrese el numero de tarjeta: ");
-            scanf("%ld", &cuentas[cuentas_leidas].num_tarjeta);
-            if(cuentas[cuentas_leidas].num_tarjeta<8){
-                printf("\n\t\aERROR: Ingrese un numero de al menos 8 digitos.\n\t");
-            }
-        }while(cuentas[cuentas_leidas].num_tarjeta<8);
+        printf("\n\tIngrese el numero de tarjeta: ");
+        validar_int(&cuentas[cuentas_leidas].num_tarjeta, 10000000);
 
         printf("\n\tIngrese el saldo de la cuenta: ");
         scanf("%lf", &cuentas[cuentas_leidas].saldo);
 
-        do{
-            printf("\n\tIngrese el interes de la cuenta: ");
-            scanf("%lf", &cuentas[cuentas_leidas].interes);
-            if(cuentas[cuentas_leidas].interes<=0){
-                printf("\n\t\aERROR: Ingrese un numero positivo.\n\t");
-            }
-        }while(cuentas[cuentas_leidas].interes<=0);
+        printf("\n\tIngrese el interes de la cuenta: ");
+        validar_fl(&cuentas[cuentas_leidas].interes, 0);
 
         fprintf(parchivo, "\n%10s %10s %10ld %10ld %12.2lf %12.2lf %10c", cuentas[cuentas_leidas].pnombre, cuentas[cuentas_leidas].apellido, 
             cuentas[cuentas_leidas].num_cuenta, cuentas[cuentas_leidas].num_tarjeta, cuentas[cuentas_leidas].saldo, 
             cuentas[cuentas_leidas].interes, cuentas[cuentas_leidas].genero);
         cuentas_leidas++;
 
-        do{
-            printf("\n\tDesea ingresar una nueva cuenta?[S/N]");
-            scanf(" %c", &respuesta);
-            respuesta=toupper(respuesta);
-            if(respuesta!='S' && respuesta!='N'){
-                printf("\n\t\aERROR: Ingrese la letra S o N\n\t");
-            }
-        }while(respuesta!='S' && respuesta!='N');
+        printf("\n\tDesea Ingresar Una Nueva Cuenta?[S/N]: ");
+        validar_char(&respuesta, 'S', 'N');
     }while(respuesta=='S');
 
     fclose(parchivo);
 }
 
-void menu(){
+void menu(void){
     int dec;
     do{
         do{
@@ -324,7 +302,7 @@ void menu(){
     }while(dec!=6);
 }
 
-int main(){
+int main(void){
     parchivo=fopen("banco.txt", "rt");
     if(!parchivo){
         parchivo=fopen("banco.txt", "wt");
