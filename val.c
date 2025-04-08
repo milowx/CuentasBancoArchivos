@@ -1,6 +1,15 @@
 //funciones que validan datos de entrada
 #include "linker.h"
 
+void validar_menu(int* dec, int li, int ls){
+    do{
+        scanf("%d", dec);
+        if(*dec<li || *dec>ls){
+            printf("\n\t\aERROR: Ingresar un numero entre %d y %d.\n\t", li, ls);
+        }
+    }while(*dec<li || *dec>ls);
+}
+
 void validar_int(unsigned long int* num,unsigned long int limite){
     do{
         scanf("%ld", num);

@@ -115,3 +115,73 @@ void ingresar(void){
 
     fclose(parchivo);
 }
+
+void ordenar_menu(void){
+    int dec;
+    printf("\n\tORDENAR POR: ");
+    printf("\n\t[1]...Numero de Tarjeta");
+    printf("\n\t[2]...Numero de Cuenta");
+    printf("\n\t[3]...Saldo");
+    printf("\n\t[4]...MENU PRINCIPAL");
+    validar_menu(&dec, 1, 4);
+    ordenar(dec);
+}
+
+void ordenar(int modo){
+    Cuenta cuenta_actual;
+    bool swap;
+
+    switch(modo){
+        case 1:
+            for(int i=0; i<cuentas_leidas; i++){
+                swap=false;
+                for(int j=0; j<cuentas_leidas-1-i; j++){
+                    if(cuentas[j].num_tarjeta>cuentas[j+1].num_tarjeta){
+                        cuenta_actual=cuentas[j];
+                        cuentas[j]=cuentas[j+1];
+                        cuentas[j+1]=cuenta_actual;
+                        swap=true;
+                    }
+                }
+                if(!swap){
+                    break;
+                }
+            }
+            break;
+        case 2:
+            for(int i=0; i<cuentas_leidas; i++){
+                swap=false;
+                for(int j=0; j<cuentas_leidas-1-i; j++){
+                    if(cuentas[j].num_cuenta>cuentas[j+1].num_cuenta){
+                        cuenta_actual=cuentas[j];
+                        cuentas[j]=cuentas[j+1];
+                        cuentas[j+1]=cuenta_actual;
+                        swap=true;
+                    }
+                }
+                if(!swap){
+                    break;
+                }
+            }
+            break;
+        case 3:
+            for(int i=0; i<cuentas_leidas; i++){
+                swap=false;
+                for(int j=0; j<cuentas_leidas-1-i; j++){
+                    if(cuentas[j].saldo>cuentas[j+1].saldo){
+                        cuenta_actual=cuentas[j];
+                        cuentas[j]=cuentas[j+1];
+                        cuentas[j+1]=cuenta_actual;
+                        swap=true;
+                    }
+                }
+                if(!swap){
+                    break;
+                }
+            }
+            break;
+        default:
+            break;
+    }
+    actualizar_archivo();
+}
