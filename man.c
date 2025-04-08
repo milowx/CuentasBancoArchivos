@@ -8,9 +8,10 @@ void transferir(void){
 
     do{
         printf("\n\tCUENTA ORIGEN:");
-        ncuenta_origen = pedir_cuenta();
+        validar_cuenta(&ncuenta_origen);
         printf("\n\tCUENTA DESTINO:");
-        ncuenta_destino = pedir_cuenta();
+        validar_cuenta(&ncuenta_destino);
+
         icuenta_origen = buscar(ncuenta_origen);
         icuenta_destino = buscar(ncuenta_destino);
         if((icuenta_destino==-1) || (icuenta_origen==-1)){
@@ -52,11 +53,11 @@ void transferir(void){
 
 void borrar(void){
     char respuesta;
-    int indice_cuenta;
+    int indice_cuenta, num;
 
     do{
         printf("\n\tBORRAR CUENTAS");
-        int num=pedir_cuenta();
+        validar_cuenta(&num);
         indice_cuenta=buscar(num);
 
         if(indice_cuenta==-1){
@@ -114,17 +115,6 @@ void ingresar(void){
     }while(respuesta=='S');
 
     fclose(parchivo);
-}
-
-void ordenar_menu(void){
-    int dec;
-    printf("\n\tORDENAR POR: ");
-    printf("\n\t[1]...Numero de Tarjeta");
-    printf("\n\t[2]...Numero de Cuenta");
-    printf("\n\t[3]...Saldo");
-    printf("\n\t[4]...MENU PRINCIPAL");
-    validar_menu(&dec, 1, 4);
-    ordenar(dec);
 }
 
 void ordenar(int modo){

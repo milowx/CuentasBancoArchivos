@@ -27,7 +27,6 @@ extern FILE* parchivo;
 
 //ayuda a buscar cuentas => " bsc.c "
 int buscar(int num);
-int pedir_cuenta(void);
 void buscar_una_cuenta(void);
 
 //manipula informacion del archivo => " man.c "
@@ -35,7 +34,6 @@ void transferir(void);
 void borrar(void);
 void ingresar(void);
 void ordenar(int modo);
-void ordenar_menu(void);
 
 //trabaja directamente con el archivo => " mod.c "
 void leer_archivo(void);
@@ -50,8 +48,12 @@ void validar_char(char* letra, char opc1, char opc2);
 void validar_fl(double* fl, double limite);
 void validar_int(unsigned long int* num,unsigned long int limite);
 void validar_menu(int* dec, int li, int ls);
+void validar_cuenta(int* num);
 
 //principal loop del programa => " bac.c "
 void menu(void);
+void leer_menu(void);
+void modificar_menu(void);
+void ordenar_menu(void);
 
 #endif

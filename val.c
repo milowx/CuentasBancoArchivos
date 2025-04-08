@@ -1,6 +1,16 @@
 //funciones que validan datos de entrada
 #include "linker.h"
 
+void validar_cuenta(int* num){
+    do{
+        printf("\n\tIngrese el numero de cuenta o numero de tarjeta[8 digitos]: ");
+        scanf("%d", num);
+        if(*num<10000000){
+            printf("\n\tIngrese un numero de 8 digitos.\n\t");
+        }
+    }while(*num<10000000);
+}
+
 void validar_menu(int* dec, int li, int ls){
     do{
         scanf("%d", dec);
