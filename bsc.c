@@ -1,0 +1,54 @@
+//funciones que ayudan a buscar informacion en el archivo
+#include "linker.h"
+
+int pedir_cuenta(void){
+    int num;
+    do{
+        printf("\n\tIngrese el numero de cuenta o numero de tarjeta[8 digitos]: ");
+        scanf("%d", &num);
+        if(num<10000000){
+            printf("\n\tIngrese un numero de 8 digitos.\n\t");
+        }
+    }while(num<10000000);
+    return num;
+}
+
+
+int buscar(int num){//regresa el indice de la cuenta
+    int indice;
+    bool encontrado=false;
+    for(int i=0;i<cuentas_leidas;i++){
+        if((cuentas[i].num_cuenta==num)||(cuentas[i].num_tarjeta==num)){
+            indice = i;
+            encontrado=true;
+            break;
+        }
+    }
+    
+    if(encontrado){
+        return indice;
+    }else{
+        return -1;
+    }
+}
+
+void buscar_una_cuenta(void){
+    char respuesta;
+    int num, indice_cuenta;
+
+    do{
+        num=pedir_cuenta();
+        indice_cuenta=buscar(num);
+
+        if(indice_cuenta==-1){
+            printf("\n\tCuentra no encontrada");
+        }else{
+            printf("\n\n\tCuenta Encontrada!");
+            mostrar_una_cuenta(indice_cuenta);
+        }
+
+        printf("\n\tDesea buscar otra cuenta?[S/N]: ");
+        validar_char(&respuesta, 'S', 'N');
+
+    }while(respuesta=='S');
+}
